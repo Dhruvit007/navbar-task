@@ -43,12 +43,12 @@ class Login extends Component {
     }
     return (
       <div className="login-page-container">
-        <img
-          src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
-          alt="website logo"
-          className="website-logo"
-        />
         <form onSubmit={this.onFormSubmit} className="contain-container">
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
+            alt="website logo"
+            className="website-logo"
+          />
           <div className="input-container">
             <label className="input-label" htmlFor="username">
               USERNAME
