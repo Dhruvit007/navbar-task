@@ -1,0 +1,15 @@
+.job-details-container {
+  background-color: #121212;
+  height: 87vh;
+  padding: 20px;
+  display: flex;
+}
+.filtered-group-container {
+  width: 100vw;
+}
+@media screen and (min-width: 576px) {
+  .filtered-group-container {
+    width: 30vw;
+    padding: 40px;
+  }
+}

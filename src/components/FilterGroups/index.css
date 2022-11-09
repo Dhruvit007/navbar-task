@@ -1,0 +1,16 @@
+.employment-type-container {
+  list-style-type: none;
+  padding-left: 0px;
+}
+.range-heading {
+  color: #f8fafc;
+  font-family: 'Roboto';
+}
+.range-list-item {
+  color: #f8fafc;
+  font-family: 'Roboto';
+  font-weight: 300;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
