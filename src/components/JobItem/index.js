@@ -1,4 +1,6 @@
 import {Component} from 'react'
+import Loader from 'react-loader-spinner'
+import EachJobItem from '../EachJobItem'
 import './index.css'
 
 const apiStatusConstants = {
@@ -9,10 +11,15 @@ const apiStatusConstants = {
 }
 
 class JobItem extends Component {
-  renderJobsSuccessView = () => {
-    const a = 1 + 1
-    return <h1>Dhruvit</h1>
-  }
+  state = {apiStatus: apiStatusConstants.success}
+
+  renderJobsSuccessView = () => <EachJobItem />
+
+  renderJobsInprogressView = () => (
+    <div className="loader-container">
+      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
+    </div>
+  )
 
   renderJobItemsView = () => {
     const {apiStatus} = this.state
