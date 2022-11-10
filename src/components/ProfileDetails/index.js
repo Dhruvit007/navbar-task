@@ -52,7 +52,7 @@ class ProfileDetails extends Component {
         <div className="profile-container">
           <img
             src={profileDetails.profile_image_url}
-            alt="xxx"
+            alt="profile"
             className="profile-photos"
           />
           <h1 className="person-name">{profileDetails.name}</h1>
@@ -76,7 +76,7 @@ class ProfileDetails extends Component {
 
   renderInprogressView = () => (
     <>
-      <div className="loader-container">
+      <div className="loader-container" testid="loader">
         <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
       </div>
       <hr className="hr-line" />
@@ -108,7 +108,9 @@ class ProfileDetails extends Component {
             className="filter-input-element"
           />
           <div className="filter-search-icon-container">
-            <BsSearch className="search-icon-style" />
+            <button type="button" testid="searchButton">
+              <BsSearch className="search-icon-style" />
+            </button>
           </div>
         </div>
         <div className="profile-section-container">

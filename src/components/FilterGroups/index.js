@@ -3,27 +3,61 @@ import './index.css'
 
 class FilterGroups extends Component {
   render() {
-    const {employmentTypesList, salaryRangesList} = this.props
+    const {
+      employmentTypesList,
+      salaryRangesList,
+      onChangeSalaryRange,
+      onChangeEmployment,
+    } = this.props
+
     return (
       <>
-        <p className="range-heading">Type of Employment</p>
+        <h1 className="range-heading">Type of Employment</h1>
         <ul className="employment-type-container">
-          {employmentTypesList.map(eachTypeEmployment => (
-            <li className="range-list-item">
-              <input type="checkbox" />
-              <label>{eachTypeEmployment.label}</label>
-            </li>
-          ))}
+          {employmentTypesList.map(eachTypeEmployment => {
+            const {employmentTypeId} = eachTypeEmployment
+
+            const employmentSelect = event => {
+              onChangeEmployment(employmentTypeId, event.target.checked)
+            }
+
+            return (
+              <li
+                key={eachTypeEmployment.employmentTypeId}
+                className="range-list-item"
+              >
+                <input
+                  type="checkbox"
+                  value={eachTypeEmployment.label}
+                  onChange={employmentSelect}
+                  id={eachTypeEmployment.label}
+                />
+                <label htmlFor={eachTypeEmployment.label}>
+                  {eachTypeEmployment.label}
+                </label>
+              </li>
+            )
+          })}
         </ul>
         <hr className="hr-line" />
-        <p className="range-heading">Salary Range</p>
+        <h1 className="range-heading">Salary Range</h1>
         <ul className="employment-type-container">
-          {salaryRangesList.map(eachRange => (
-            <li className="range-list-item">
-              <input type="checkbox" />
-              <label>{eachRange.label}</label>
-            </li>
-          ))}
+          {salaryRangesList.map(eachRange => {
+            const {salaryRangeId} = eachRange
+            const rangeChange = () => onChangeSalaryRange(salaryRangeId)
+            return (
+              <li className="range-list-item" key={eachRange.salaryRangeId}>
+                <input
+                  value={eachRange.salaryRangeId}
+                  type="radio"
+                  name="salary-range"
+                  onChange={rangeChange}
+                  id={eachRange.label}
+                />
+                <label htmlFor={eachRange.label}>{eachRange.label}</label>
+              </li>
+            )
+          })}
         </ul>
       </>
     )

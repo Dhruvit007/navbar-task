@@ -1,4 +1,6 @@
 import {Component} from 'react'
+import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 import Header from '../Header'
 import ProfileDetails from '../ProfileDetails'
 import FilterGroups from '../FilterGroups'
@@ -43,7 +45,121 @@ const salaryRangesList = [
   },
 ]
 
+const apiStatusConstants = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  inProgress: 'IN_PROGRESS',
+  failure: 'FAILURE',
+}
+
 class Jobs extends Component {
+  state = {
+    employmentType: [],
+    minimumPackage: 0,
+    searchInput: '',
+    searchResult: [],
+    apiStatus: apiStatusConstants.initial,
+  }
+
+  componentDidMount() {
+    this.fetchJobData()
+  }
+
+  fetchJobData = async () => {
+    this.setState({apiStatus: apiStatusConstants.inProgress})
+    const jwtToken = Cookies.get('jwt_token')
+    const {employmentType, minimumPackage, searchInput} = this.state
+    const strEmploymentType = employmentType.join()
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    }
+    const searchApiUrl = `https://apis.ccbp.in/jobs?employment_type=${strEmploymentType}&minimum_package=${minimumPackage}&search=${searchInput}`
+    const response = await fetch(searchApiUrl, options)
+    if (response.ok === true) {
+      const data = await response.json()
+      const updatedData = data.jobs.map(eachCompany => ({
+        companyLogoUrl: eachCompany.company_logo_url,
+        employmentType: eachCompany.employment_type,
+        id: eachCompany.id,
+        description: eachCompany.job_description,
+        location: eachCompany.location,
+        package: eachCompany.package_per_annum,
+        rating: eachCompany.rating,
+        title: eachCompany.title,
+      }))
+      this.setState({
+        searchResult: updatedData,
+        apiStatus: apiStatusConstants.success,
+      })
+    } else {
+      this.setState({apiStatus: apiStatusConstants.failure})
+    }
+  }
+
+  onChangeSalaryRange = range => {
+    this.setState({minimumPackage: range}, this.fetchJobData)
+  }
+
+  onChangeEmployment = (type, checkStatus) => {
+    console.log(type, checkStatus)
+    const {employmentType} = this.state
+    console.log(employmentType)
+    if (checkStatus === true) {
+      this.setState(
+        {employmentType: [...employmentType, type]},
+        this.fetchJobData,
+      )
+    } else if (checkStatus === false) {
+      this.setState(
+        {
+          employmentType: employmentType.filter(eachData => eachData !== type),
+        },
+        this.fetchJobData,
+      )
+    }
+    console.log(type, checkStatus)
+  }
+
+  renderJobsInprogressView = () => (
+    <div testid="loader" className="loader-container-jobs">
+      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
+    </div>
+  )
+
+  renderJobsFailureView = () => (
+    <div className="jobs-failure-view-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+        alt="failure view"
+      />
+      <h1>Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for</p>
+      <button type="button">Retry</button>
+    </div>
+  )
+
+  renderJobsSuccessView = () => {
+    const {searchResult} = this.state
+    return <JobItem searchResult={searchResult} />
+  }
+
+  renderJobItemsView = () => {
+    const {apiStatus} = this.state
+    switch (apiStatus) {
+      case apiStatusConstants.success:
+        return this.renderJobsSuccessView()
+      case apiStatusConstants.failure:
+        return this.renderJobsFailureView()
+      case apiStatusConstants.inProgress:
+        return this.renderJobsInprogressView()
+      default:
+        return null
+    }
+  }
+
   render() {
     return (
       <>
@@ -54,10 +170,12 @@ class Jobs extends Component {
             <FilterGroups
               employmentTypesList={employmentTypesList}
               salaryRangesList={salaryRangesList}
+              onChangeSalaryRange={this.onChangeSalaryRange}
+              onChangeEmployment={this.onChangeEmployment}
             />
           </div>
           <div className="job-items-details-container">
-            <JobItem />
+            {this.renderJobItemsView()}
           </div>
         </div>
       </>
