@@ -103,6 +103,14 @@ class Jobs extends Component {
     this.setState({minimumPackage: range}, this.fetchJobData)
   }
 
+  onChangeSearchInput = text => {
+    this.setState({searchInput: text})
+  }
+
+  onClickRetry = () => {
+    this.fetchJobData()
+  }
+
   onChangeEmployment = (type, checkStatus) => {
     console.log(type, checkStatus)
     const {employmentType} = this.state
@@ -120,11 +128,10 @@ class Jobs extends Component {
         this.fetchJobData,
       )
     }
-    console.log(type, checkStatus)
   }
 
   renderJobsInprogressView = () => (
-    <div testid="loader" className="loader-container-jobs">
+    <div className="loader-container-jobs">
       <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
     </div>
   )
@@ -137,13 +144,34 @@ class Jobs extends Component {
       />
       <h1>Oops! Something Went Wrong</h1>
       <p>We cannot seem to find the page you are looking for</p>
-      <button type="button">Retry</button>
+      <button onClick={this.onClickRetry} type="button">
+        Retry
+      </button>
     </div>
   )
 
   renderJobsSuccessView = () => {
-    const {searchResult} = this.state
-    return <JobItem searchResult={searchResult} />
+    const {searchResult, searchInput} = this.state
+    if (searchResult.length === 0) {
+      return (
+        <div>
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
+            alt="no jobs"
+          />
+          <h1>No Jobs Found</h1>
+          <p>We could not find any jobs. Try other filters</p>
+        </div>
+      )
+    }
+    return (
+      <JobItem
+        searchResult={searchResult}
+        searchInput={searchInput}
+        onChangeSearchInput={this.onChangeSearchInput}
+        onClickRetry={this.onClickRetry}
+      />
+    )
   }
 
   renderJobItemsView = () => {
@@ -161,12 +189,17 @@ class Jobs extends Component {
   }
 
   render() {
+    const {searchInput} = this.state
     return (
       <>
         <Header />
         <div className="job-details-container">
           <div className="filtered-group-container">
-            <ProfileDetails />
+            <ProfileDetails
+              onChangeSearchInput={this.onChangeSearchInput}
+              searchInput={searchInput}
+              onClickRetry={this.onClickRetry}
+            />
             <FilterGroups
               employmentTypesList={employmentTypesList}
               salaryRangesList={salaryRangesList}

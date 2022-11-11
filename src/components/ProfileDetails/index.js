@@ -44,6 +44,10 @@ class ProfileDetails extends Component {
     }
   }
 
+  onRetryProfile = () => {
+    this.getProfileData()
+  }
+
   renderProfileSuccessView = () => {
     const {profileData} = this.state
     const {profileDetails} = profileData
@@ -66,7 +70,11 @@ class ProfileDetails extends Component {
   renderProfileFailureView = () => (
     <>
       <div className="profile-retry-button">
-        <button className="retry-button" type="button">
+        <button
+          onClick={this.onRetryProfile}
+          className="retry-button"
+          type="button"
+        >
           Retry
         </button>
       </div>
@@ -76,7 +84,7 @@ class ProfileDetails extends Component {
 
   renderInprogressView = () => (
     <>
-      <div className="loader-container" testid="loader">
+      <div className="loader-container">
         <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
       </div>
       <hr className="hr-line" />
@@ -98,7 +106,18 @@ class ProfileDetails extends Component {
     }
   }
 
+  changeInput = event => {
+    const {onChangeSearchInput} = this.props
+    onChangeSearchInput(event.target.value)
+  }
+
+  onSearchBtnPress = () => {
+    const {onClickRetry} = this.props
+    onClickRetry()
+  }
+
   render() {
+    const {searchInput} = this.props
     return (
       <>
         <div className="filtered-group-search-input">
@@ -106,9 +125,15 @@ class ProfileDetails extends Component {
             type="search"
             placeholder="Search"
             className="filter-input-element"
+            onChange={this.changeInput}
+            value={searchInput}
           />
           <div className="filter-search-icon-container">
-            <button type="button" testid="searchButton">
+            <button
+              onClick={this.onSearchBtnPress}
+              type="button"
+              //   testid="searchButton"
+            >
               <BsSearch className="search-icon-style" />
             </button>
           </div>

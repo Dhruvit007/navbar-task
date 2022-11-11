@@ -5,8 +5,18 @@ import EachJobItem from '../EachJobItem'
 import './index.css'
 
 class JobItem extends Component {
+  onChangeInput = event => {
+    const {onChangeSearchInput} = this.props
+    onChangeSearchInput(event.target.value)
+  }
+
+  onSearchBtnPress = () => {
+    const {onClickRetry} = this.props
+    onClickRetry()
+  }
+
   render() {
-    const {searchResult} = this.props
+    const {searchResult, searchInput} = this.props
     return (
       <>
         <div className="filtered-group-search-input-job-item">
@@ -14,9 +24,15 @@ class JobItem extends Component {
             type="search"
             placeholder="Search"
             className="filter-input-element-job-item"
+            value={searchInput}
+            onChange={this.onChangeInput}
           />
           <div className="filter-search-icon-container-job-item">
-            <button type="button" testid="searchButton">
+            <button
+              onClick={this.onSearchBtnPress}
+              type="button"
+              //   testid="searchButton"
+            >
               <BsSearch className="search-icon-style-job-item" />
             </button>
           </div>

@@ -75,3 +75,6 @@
   color: #f8fafc;
   font-family: 'Roboto';
 }
+.link-item {
+  text-decoration: none;
+}
