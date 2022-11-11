@@ -6,6 +6,11 @@
   color: #f8fafc;
   font-family: 'Roboto';
 }
+@media screen and (max-width: 576px) {
+  .range-heading {
+    font-size: 15px;
+  }
+}
 .range-list-item {
   color: #f8fafc;
   font-family: 'Roboto';

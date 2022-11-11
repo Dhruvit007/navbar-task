@@ -29,9 +29,9 @@ class JobItem extends Component {
           />
           <div className="filter-search-icon-container-job-item">
             <button
+              className="search-btn"
               onClick={this.onSearchBtnPress}
               type="button"
-              //   testid="searchButton"
             >
               <BsSearch className="search-icon-style-job-item" />
             </button>

@@ -45,10 +45,15 @@
   width: 90vw;
 }
 .skills-container-title {
-  color: white;
+  color: #f8fafc;
   font-family: 'Roboto';
+  font-weight: 400;
   margin-top: 20px;
-  font-weight: bold;
+}
+@media screen and (max-width: 576px) {
+  .skills-container-title {
+    font-size: 15px;
+  }
 }
 .skills-container {
   list-style-type: none;
@@ -123,4 +128,24 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+.visit-link-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.external-link-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.url-style {
+  margin-right: 5px;
+  text-decoration: none;
+  color: #6366f1;
+  font-family: 'Roboto';
+}
+.external-link-icon {
+  color: #6366f1;
+  font-family: 'Roboto';
 }

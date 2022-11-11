@@ -4,6 +4,7 @@ import {Component} from 'react'
 import {AiFillStar} from 'react-icons/ai'
 import {GoLocation} from 'react-icons/go'
 import {HiShoppingBag} from 'react-icons/hi'
+import {FiExternalLink} from 'react-icons/fi'
 import Header from '../Header'
 import SimilarJobItem from '../SimilarJobItem'
 import './index.css'
@@ -16,7 +17,7 @@ const apiStatusConstants = {
 }
 
 class DetailedJobItem extends Component {
-  state = {apiStatus: apiStatusConstants.success, jobDetailsData: {}}
+  state = {apiStatus: apiStatusConstants.initial, jobDetailsData: {}}
 
   componentDidMount() {
     this.fetchSimilarJobsData()
@@ -51,27 +52,33 @@ class DetailedJobItem extends Component {
     }
   }
 
+  onRetryJob = () => {
+    this.fetchSimilarJobsData()
+  }
+
   renderJobsDetailedSuccessView = () => {
     const {jobDetailsData} = this.state
-    console.log(jobDetailsData)
     const {jobDetails, similarJobs} = jobDetailsData
-    console.log(similarJobs)
+    const lifeAtCompany = jobDetails.life_at_company
+
+    console.log(lifeAtCompany)
+    const {skills} = jobDetails
     return (
       <div className="detailed-item-master-container">
         <div className="each-job-item-bg-container detailed-job-container">
           <div className="first-row">
             <div>
               <img
-                src="https://assets.ccbp.in/frontend/react-js/jobby-app/netflix-img.png"
-                alt="company logo"
+                src={jobDetails.company_logo_url}
+                alt="job details company logo"
                 className="company-logo"
               />
             </div>
             <div className="each-item-designation-star-information">
-              <h1 className="job-role">Frontend Engineer</h1>
+              <h1 className="job-role">{jobDetails.title}</h1>
               <div className="start-rating">
                 <AiFillStar className="star-icon" />
-                <p className="rating">4</p>
+                <p className="rating">{jobDetails.rating}</p>
               </div>
             </div>
           </div>
@@ -79,50 +86,48 @@ class DetailedJobItem extends Component {
             <div className="location-internship-container">
               <div className="location-container">
                 <GoLocation className="icon" />
-                <p className="icon-info">Delhi</p>
+                <p className="icon-info">{jobDetails.location}</p>
               </div>
               <div className="internship-container">
                 <HiShoppingBag className="icon" />
-                <p className="icon-info">Internship</p>
+                <p className="icon-info">{jobDetails.employment_type}</p>
               </div>
             </div>
-            <p className="icon-info salary">10 LPA</p>
+            <p className="icon-info salary">{jobDetails.package_per_annum}</p>
           </div>
           <hr className="hr-line" />
-          <div className="third-row">
+          <div className="visit-link-container">
             <h1 className="description">Description</h1>
-            <p className="description">
-              We are looking for a DevOps Engineer with a minimum of 5 years of
-              industry experience, preferably working in the financial IT
-              community. The position in the team is focused on delivering
-              exceptional services to both BU and Dev
-            </p>
+            <div className="external-link-container">
+              <a className="url-style" href={jobDetails.company_website_url}>
+                Visit
+              </a>
+              <FiExternalLink className="external-link-icon" />
+            </div>
           </div>
-          <p className="skills-container-title">Skills</p>
+          <div className="third-row">
+            <p className="description">{jobDetails.job_description}</p>
+          </div>
+          <h1 className="skills-container-title">Skills</h1>
           <ul className="skills-container">
-            <li className="skill-item">
-              <img
-                src="https://assets.ccbp.in/frontend/react-js/jobby-app/docker-img.png"
-                alt="ppp"
-                className="skill-image"
-              />
-              <p>Docker</p>
-            </li>
+            {skills.map(eachSkill => (
+              <li className="skill-item" key={eachSkill.name}>
+                <img
+                  src={eachSkill.image_url}
+                  alt={eachSkill.name}
+                  className="skill-image"
+                />
+                <p>{eachSkill.name}</p>
+              </li>
+            ))}
           </ul>
           <div className="about-company-life-main-container">
             <h1 className="company-life-heading">Life at Company</h1>
             <div className="company-life-container">
-              <p className="about-company-life">
-                Our core philosophy is people over process. Our culture has been
-                instrumental to our success. It has helped us attract and retain
-                stunning colleagues, making work here more satisfying.
-                Entertainment, like friendship, is a fundamental human need, and
-                it changes how we feel and gives us common ground. We want to
-                entertain the world.
-              </p>
+              <p className="about-company-life">{lifeAtCompany.description}</p>
               <img
-                src="https://assets.ccbp.in/frontend/react-js/jobby-app/life-netflix-img.png"
-                alt="yyz"
+                src={lifeAtCompany.image_url}
+                alt="life at company"
                 className="company-life-image"
               />
             </div>
@@ -152,7 +157,7 @@ class DetailedJobItem extends Component {
         <h1>Oops! Something Went Wrong</h1>
         <p>We cannot seem to find the page you are looking for</p>
         <button
-          onClick={this.onRetryProfile}
+          onClick={this.onRetryJob}
           className="retry-button"
           type="button"
         >

@@ -42,7 +42,9 @@ const EachJobItem = props => {
         <hr className="hr-line" />
         <div className="third-row">
           <h1 className="description">Description</h1>
-          <p className="description">{eachJobData.description}</p>
+          <p className="description detailed-description">
+            {eachJobData.description}
+          </p>
         </div>
       </div>
     </Link>

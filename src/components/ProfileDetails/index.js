@@ -130,9 +130,9 @@ class ProfileDetails extends Component {
           />
           <div className="filter-search-icon-container">
             <button
+              className="search-btn"
               onClick={this.onSearchBtnPress}
               type="button"
-              //   testid="searchButton"
             >
               <BsSearch className="search-icon-style" />
             </button>
