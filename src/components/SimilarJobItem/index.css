@@ -1,0 +1,9 @@
+.detailed-similar-job-container-item {
+  width: 30%;
+  margin-bottom: 20px;
+}
+@media screen and (max-width: 576px) {
+  .detailed-similar-job-container-item {
+    width: 100%;
+  }
+}

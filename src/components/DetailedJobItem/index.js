@@ -1,9 +1,11 @@
 import Loader from 'react-loader-spinner'
+import Cookies from 'js-cookie'
 import {Component} from 'react'
 import {AiFillStar} from 'react-icons/ai'
 import {GoLocation} from 'react-icons/go'
 import {HiShoppingBag} from 'react-icons/hi'
 import Header from '../Header'
+import SimilarJobItem from '../SimilarJobItem'
 import './index.css'
 
 const apiStatusConstants = {
@@ -14,87 +16,127 @@ const apiStatusConstants = {
 }
 
 class DetailedJobItem extends Component {
-  state = {apiStatus: apiStatusConstants.success}
+  state = {apiStatus: apiStatusConstants.success, jobDetailsData: {}}
 
   componentDidMount() {
-    // this.setState({apiStatus: apiStatusConstants.inProgress})
+    this.fetchSimilarJobsData()
+  }
+
+  fetchSimilarJobsData = async () => {
+    this.setState({apiStatus: apiStatusConstants.inProgress})
+    const jwtToken = Cookies.get('jwt_token')
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    }
     const {match} = this.props
     const {params} = match
     const {id} = params
+    const apiUrl = `https://apis.ccbp.in/jobs/${id}`
+    const response = await fetch(apiUrl, options)
+    if (response.ok === true) {
+      const data = await response.json()
+      const updatedData = {
+        jobDetails: data.job_details,
+        similarJobs: data.similar_jobs,
+      }
+      this.setState({
+        apiStatus: apiStatusConstants.success,
+        jobDetailsData: updatedData,
+      })
+    } else {
+      this.setState({apiStatus: apiStatusConstants.failure})
+    }
   }
 
   renderJobsDetailedSuccessView = () => {
-    const b = 1 + 1
+    const {jobDetailsData} = this.state
+    console.log(jobDetailsData)
+    const {jobDetails, similarJobs} = jobDetailsData
+    console.log(similarJobs)
     return (
-      <div className="each-job-item-bg-container detailed-job-container">
-        <div className="first-row">
-          <div>
-            <img
-              src="https://assets.ccbp.in/frontend/react-js/jobby-app/netflix-img.png"
-              alt="company logo"
-              className="company-logo"
-            />
-          </div>
-          <div className="each-item-designation-star-information">
-            <h1 className="job-role">Frontend Engineer</h1>
-            <div className="start-rating">
-              <AiFillStar className="star-icon" />
-              <p className="rating">4</p>
+      <div className="detailed-item-master-container">
+        <div className="each-job-item-bg-container detailed-job-container">
+          <div className="first-row">
+            <div>
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/jobby-app/netflix-img.png"
+                alt="company logo"
+                className="company-logo"
+              />
+            </div>
+            <div className="each-item-designation-star-information">
+              <h1 className="job-role">Frontend Engineer</h1>
+              <div className="start-rating">
+                <AiFillStar className="star-icon" />
+                <p className="rating">4</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="second-row">
-          <div className="location-internship-container">
-            <div className="location-container">
-              <GoLocation className="icon" />
-              <p className="icon-info">Delhi</p>
+          <div className="second-row">
+            <div className="location-internship-container">
+              <div className="location-container">
+                <GoLocation className="icon" />
+                <p className="icon-info">Delhi</p>
+              </div>
+              <div className="internship-container">
+                <HiShoppingBag className="icon" />
+                <p className="icon-info">Internship</p>
+              </div>
             </div>
-            <div className="internship-container">
-              <HiShoppingBag className="icon" />
-              <p className="icon-info">Internship</p>
-            </div>
+            <p className="icon-info salary">10 LPA</p>
           </div>
-          <p className="icon-info salary">10 LPA</p>
-        </div>
-        <hr className="hr-line" />
-        <div className="third-row">
-          <h1 className="description">Description</h1>
-          <p className="description">
-            We are looking for a DevOps Engineer with a minimum of 5 years of
-            industry experience, preferably working in the financial IT
-            community. The position in the team is focused on delivering
-            exceptional services to both BU and Dev
-          </p>
-        </div>
-        <p className="skills-container-title">Skills</p>
-        <ul className="skills-container">
-          <li className="skill-item">
-            <img
-              src="https://assets.ccbp.in/frontend/react-js/jobby-app/docker-img.png"
-              alt="ppp"
-              className="skill-image"
-            />
-            <p>Docker</p>
-          </li>
-        </ul>
-        <div className="about-company-life-main-container">
-          <div className="company-life-container">
-            <h1>Life at Company</h1>
-            <p>
-              Our core philosophy is people over process. Our culture has been
-              instrumental to our success. It has helped us attract and retain
-              stunning colleagues, making work here more satisfying.
-              Entertainment, like friendship, is a fundamental human need, and
-              it changes how we feel and gives us common ground. We want to
-              entertain the world.
+          <hr className="hr-line" />
+          <div className="third-row">
+            <h1 className="description">Description</h1>
+            <p className="description">
+              We are looking for a DevOps Engineer with a minimum of 5 years of
+              industry experience, preferably working in the financial IT
+              community. The position in the team is focused on delivering
+              exceptional services to both BU and Dev
             </p>
           </div>
-          <img
-            src="https://assets.ccbp.in/frontend/react-js/jobby-app/life-netflix-img.png"
-            alt="yyz"
-            className="company-life-container"
-          />
+          <p className="skills-container-title">Skills</p>
+          <ul className="skills-container">
+            <li className="skill-item">
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/jobby-app/docker-img.png"
+                alt="ppp"
+                className="skill-image"
+              />
+              <p>Docker</p>
+            </li>
+          </ul>
+          <div className="about-company-life-main-container">
+            <h1 className="company-life-heading">Life at Company</h1>
+            <div className="company-life-container">
+              <p className="about-company-life">
+                Our core philosophy is people over process. Our culture has been
+                instrumental to our success. It has helped us attract and retain
+                stunning colleagues, making work here more satisfying.
+                Entertainment, like friendship, is a fundamental human need, and
+                it changes how we feel and gives us common ground. We want to
+                entertain the world.
+              </p>
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/jobby-app/life-netflix-img.png"
+                alt="yyz"
+                className="company-life-image"
+              />
+            </div>
+          </div>
         </div>
+        <h1 className="similar-jobs-heading">Similar Jobs</h1>
+        <ul className="similar-jobs-detailed-container detailed-similar-job-container">
+          {similarJobs.map(eachSimilarJob => (
+            <SimilarJobItem
+              key={eachSimilarJob.id}
+              eachSimilarJobDetails={eachSimilarJob}
+            />
+          ))}
+        </ul>
       </div>
     )
   }

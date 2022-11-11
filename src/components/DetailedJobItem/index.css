@@ -1,3 +1,8 @@
+.detailed-item-master-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .master-container-detailed-job-view {
   min-height: 87vh;
   display: flex;
@@ -77,16 +82,45 @@
 }
 .about-company-life-main-container {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 500px;
-  background-color: aqua;
+  flex-direction: column;
 }
 .company-life-container {
   color: #f8fafc;
   font-family: 'Roboto';
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
-.company-life-container {
-  align-self: flex-end;
+@media screen and (max-width: 576px) {
+  .company-life-container {
+    flex-direction: column;
+  }
+}
+.company-life-heading {
+  color: #f8fafc;
+  font-family: 'Roboto';
+}
+.about-company-life {
+  color: #f8fafc;
+  font-family: 'Roboto';
+}
+.company-life-image {
+  width: 300px;
+  flex-shrink: 0;
+}
+.similar-jobs-heading {
+  color: #f8fafc;
+  font-family: 'Roboto';
+  text-align: start;
+  width: 100%;
+}
+.detailed-similar-job-container {
+  color: #f8fafc;
+  font-family: 'Roboto';
+  padding-left: 0px;
+  list-style-type: none;
+  width: 90vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
