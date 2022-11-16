@@ -1,0 +1,22 @@
+.page-container {
+  background-color: aquamarine;
+  border: solid 2px;
+  height: 100vh;
+}
+
+.navbar-style {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: lightgoldenrodyellow;
+  padding: 20px;
+}
+.nav-items {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  text-decoration: none;
+}
+.nav-link {
+  text-decoration: none;
+}
